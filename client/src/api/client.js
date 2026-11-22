@@ -37,5 +37,6 @@ export const getAvailable = (status) =>
   request('GET', `/listings/available${status ? `?status=${encodeURIComponent(status)}` : ''}`);
 export const claimListing = (id, body) => request('POST', `/listings/${id}/claim`, body);
 export const transitionListing = (id, body) => request('POST', `/listings/${id}/transition`, body);
-export const getListing = (id) => request('GET', `/listings/${id}`);
+export const getListing = (id, role) =>
+  request('GET', `/listings/${id}${role ? `?role=${encodeURIComponent(role)}` : ''}`);
 export const getImpact = () => request('GET', '/impact');

@@ -1,6 +1,7 @@
 {
   "name": "Rescue the Surplus",
   "short_name": "RescueSurplus",
+  "description": "Connect surplus food with community receivers",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#16a34a",

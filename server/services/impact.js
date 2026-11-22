@@ -10,7 +10,7 @@ function getImpact(db) {
     .get();
   const funding = db
     .prepare(
-      "SELECT COALESCE(SUM(p.donor_contribution), 0) AS donor_contribution, COALESCE(SUM(p.csr_coverage), 0) AS csr_coverage FROM payments p JOIN listings l ON l.id = p.listing_id WHERE l.status = 'delivered'"
+      "SELECT COALESCE(SUM(p.donor_contribution), 0) AS donor_contribution, COALESCE(SUM(p.csr_coverage), 0) AS csr_coverage, COALESCE(SUM(p.receiver_charge), 0) AS receiver_charge FROM payments p JOIN listings l ON l.id = p.listing_id WHERE l.status = 'delivered'"
     )
     .get();
 
@@ -50,7 +50,7 @@ function getImpact(db) {
     funding_split: {
       donor_contributed: r2(funding.donor_contribution),
       csr_coverage: r2(funding.csr_coverage),
-      receiver_paid: 0,
+      receiver_paid: r2(funding.receiver_charge),
     },
   };
 }
