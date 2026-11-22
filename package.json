@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "concurrently \"cd client && npm run dev\" \"cd server && node index.js\"",
     "build": "cd client && npm install && npm run build && cd ../server && npm install",
+    "test": "node --check server/index.js server/routes/listings.js server/routes/impact.js server/services/impact.js server/services/matching.js server/middleware/validate.js",
     "start": "cd server && node index.js"
   },
   "devDependencies": {
