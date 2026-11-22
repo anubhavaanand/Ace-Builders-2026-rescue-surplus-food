@@ -1,7 +1,37 @@
 {
   "schemaVersion": 2,
   "createdAt": "2026-11-22T11:03:36.709Z",
-  "updatedAt": "2026-11-22T11:03:36.709Z",
-  "phases": {},
-  "settings": {}
+  "updatedAt": "2026-11-22T12:10:58.979Z",
+  "phases": {
+    "brand-guided": {
+      "updatedAt": "2026-11-22T12:10:45.564Z",
+      "committed": false
+    },
+    "schema": {
+      "updatedAt": "2026-11-22T12:10:47.085Z",
+      "committed": false
+    },
+    "stack": {
+      "updatedAt": "2026-11-22T12:10:58.979Z",
+      "committed": false
+    }
+  },
+  "settings": {},
+  "flow": {
+    "brand": {
+      "hash": "f33ba110ce3c680a",
+      "builtFrom": {}
+    },
+    "schema": {
+      "hash": "23cc3e3d39e25a14",
+      "builtFrom": {}
+    },
+    "stack": {
+      "hash": "82862b6c275e078f",
+      "parts": {
+        "databaseKind": "684a0cfa7ca53b79"
+      },
+      "builtFrom": {}
+    }
+  }
 }
