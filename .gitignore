@@ -1,0 +1,19 @@
+node_modules/
+server/db/*.db
+client/dist/
+.env
+*.log
+PRD-FULL.md
+02-TECH-ARCHITECTURE.md
+03-DATA-MODEL.md
+04-API-CONTRACT.md
+05-SEED-DATA.md
+08-BUSINESS-VIABILITY.md
+HANDOFF.md 
+07-PROMPT-LOG.md
+
+
+# Codebenders IDE internals — keep state.json and phases/ as usage evidence
+.codebenders/*
+!.codebenders/state.json
+!.codebenders/phases/
