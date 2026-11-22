@@ -41,7 +41,7 @@ function getImpact(db) {
 
   return {
     metrics: {
-      meals_saved: mealsSaved,
+      meals_saved: Math.round(mealsSaved),
       kg_diverted: kgDiverted,
       co2e_avoided_kg: co2eAvoidedKg,
       cost_per_meal_saved: costPerMealSaved,

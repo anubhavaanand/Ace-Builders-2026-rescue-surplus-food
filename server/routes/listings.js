@@ -85,7 +85,7 @@ router.get('/available', (req, res) => {
 
   const listings = db
     .prepare(
-      'SELECT l.*, d.name AS donor_name, d.type AS donor_type FROM listings l JOIN donors d ON d.id = l.donor_id WHERE l.status = ?'
+      'SELECT l.*, d.name AS donor_name, d.type AS donor_type, v.name AS volunteer_name, r.name AS receiver_name FROM listings l JOIN donors d ON d.id = l.donor_id LEFT JOIN volunteers v ON v.id = l.claimed_by_volunteer_id LEFT JOIN receivers r ON r.id = l.claimed_by_receiver_id WHERE l.status = ?'
     )
     .all(status);
   const nowMs = Date.now();

@@ -4,8 +4,11 @@
   "scripts": {
     "start": "node index.js"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "express": "^4.21.0",
-    "better-sqlite3": "*"
+    "better-sqlite3": "^13.2.0"
   }
 }

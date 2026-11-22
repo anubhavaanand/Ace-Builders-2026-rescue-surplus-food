@@ -82,7 +82,7 @@ export default function PostSurplus() {
     quantity_unit: 'meals',
     pickup_by: defaultPickup(),
     storage: 'hot',
-    allergens: [],
+    allergens: null, // null = not yet chosen (required); [] = 'None'
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null); // { message, field }
@@ -95,8 +95,9 @@ export default function PostSurplus() {
     const key = name.toLowerCase();
     setForm((f) => {
       if (key === 'none') return { ...f, allergens: [] };
-      const has = f.allergens.includes(key);
-      return { ...f, allergens: has ? f.allergens.filter((a) => a !== key) : [...f.allergens, key] };
+      const current = f.allergens ?? [];
+      const has = current.includes(key);
+      return { ...f, allergens: has ? current.filter((a) => a !== key) : [...current, key] };
     });
   };
 
@@ -112,6 +113,10 @@ export default function PostSurplus() {
     const pickup = new Date(form.pickup_by);
     if (Number.isNaN(pickup.getTime())) {
       setError({ message: 'Pick a valid pickup time', field: 'pickup_by' });
+      return;
+    }
+    if (form.allergens === null) {
+      setError({ message: 'Choose an allergen option, or None', field: 'allergens' });
       return;
     }
     const loc = DONOR_LOCATIONS[donorId];
@@ -171,16 +176,33 @@ export default function PostSurplus() {
         </Field>
 
         <Field legend="Quantity" invalid={error?.field === 'quantity_value' || error?.field === 'quantity_unit'}>
-          <input
-            type="number"
-            min="0"
-            step="any"
-            inputMode="decimal"
-            aria-label="Quantity value"
-            value={form.quantity_value}
-            onChange={(e) => update('quantity_value', e.target.value)}
-            className={inputClass('quantity_value')}
-          />
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="Decrease quantity"
+              onClick={() => update('quantity_value', String(Math.max(1, (Number(form.quantity_value) || 0) - 1)))}
+              className="min-h-[48px] min-w-[48px] rounded-xl border-2 border-gray-300 bg-white text-2xl font-semibold text-gray-800"
+            >
+              −
+            </button>
+            <input
+              type="text"
+              readOnly
+              inputMode="none"
+              aria-label="Quantity value"
+              value={form.quantity_value}
+              placeholder="0"
+              className={`${inputClass('quantity_value')} text-center`}
+            />
+            <button
+              type="button"
+              aria-label="Increase quantity"
+              onClick={() => update('quantity_value', String((Number(form.quantity_value) || 0) + 1))}
+              className="min-h-[48px] min-w-[48px] rounded-xl border-2 border-gray-300 bg-white text-2xl font-semibold text-gray-800"
+            >
+              +
+            </button>
+          </div>
           <ToggleButtons
             options={UNIT_OPTIONS}
             value={form.quantity_unit}
@@ -201,11 +223,14 @@ export default function PostSurplus() {
           <ToggleButtons options={STORAGE_OPTIONS} value={form.storage} onChange={(v) => update('storage', v)} />
         </Field>
 
-        <Field legend="Allergens">
+        <Field legend="Allergens" invalid={error?.field === 'allergens'}>
           <div className="flex flex-wrap gap-2">
             {ALLERGEN_OPTIONS.map((name) => {
               const key = name.toLowerCase();
-              const active = key === 'none' ? form.allergens.length === 0 : form.allergens.includes(key);
+              const active =
+                key === 'none'
+                  ? form.allergens !== null && form.allergens.length === 0
+                  : (form.allergens ?? []).includes(key);
               return (
                 <button
                   key={name}

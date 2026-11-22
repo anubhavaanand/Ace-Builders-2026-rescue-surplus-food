@@ -3,7 +3,7 @@ import ScoreCard from '../components/ScoreCard.jsx';
 import { claimListing, getAvailable } from '../api/client.js';
 import { useRoleContext } from '../context/RoleContext.jsx';
 
-const EXPIRED_MSG = 'Listing expired and removed';
+const EXPIRED_MSG = 'This listing expired — it has been removed.';
 
 export default function MatchClaim() {
   const { receiverId, volunteerId } = useRoleContext();

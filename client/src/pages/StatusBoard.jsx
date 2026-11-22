@@ -96,7 +96,14 @@ export default function StatusBoard() {
             {items.length === 0 && <p className="text-gray-500">None</p>}
             {items.map((listing) => {
               const ts = parseServerDate(listing[section.timeField]);
-              const actor = listing.claimed_by_volunteer_id || listing.claimed_by_receiver_id || '—';
+              const actor =
+                listing.status === 'posted'
+                  ? listing.donor_name
+                  : listing.volunteer_name ||
+                    listing.receiver_name ||
+                    listing.claimed_by_volunteer_id ||
+                    listing.claimed_by_receiver_id ||
+                    '—';
               const action = actionFor(listing);
               return (
                 <article key={listing.id} className="space-y-2 rounded-2xl border border-gray-200 p-4">

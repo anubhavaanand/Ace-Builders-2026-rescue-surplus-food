@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-// Count-up timer from 0. freeze() stops it and keeps the current value.
+// 60-second countdown. Stops at 0. freeze() stops it and keeps the current value.
+const START_SECONDS = 60;
+
 export default function useTimer() {
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(START_SECONDS);
   const [frozen, setFrozen] = useState(false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    intervalRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
+    intervalRef.current = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
     return () => {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
