@@ -214,9 +214,12 @@ router.post('/:id/transition', (req, res) => {
       for (const [kind, value, formula, inputs] of rows) {
         insertImpact.run(crypto.randomUUID(), req.params.id, kind, value, formula, JSON.stringify(inputs));
       }
+      const CSR_TOPUP = 20;
+      const donorContribution = 0;
+      const csrCoverage = Math.max(0, CSR_TOPUP - donorContribution);
       db.prepare(
-        'INSERT INTO payments (id, listing_id, donor_contribution, csr_coverage, receiver_charge) VALUES (?, ?, 0, 0, 0)'
-      ).run(crypto.randomUUID(), req.params.id);
+        'INSERT INTO payments (id, listing_id, donor_contribution, csr_coverage, receiver_charge) VALUES (?, ?, ?, ?, 0)'
+      ).run(crypto.randomUUID(), req.params.id, donorContribution, csrCoverage);
     }
     return true;
   });

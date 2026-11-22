@@ -5,16 +5,23 @@ const r1 = (x) => Math.round(x * 10) / 10;
 const r2 = (x) => Math.round(x * 100) / 100;
 
 function getImpact(db) {
-  const delivered = db
-    .prepare("SELECT COALESCE(SUM(quantity_value), 0) AS total, COUNT(*) AS n FROM listings WHERE status = 'delivered'")
-    .get();
+  const mealsSaved = r2(
+    db.prepare(`
+      SELECT COALESCE(SUM(
+        CASE WHEN quantity_unit = 'kg' THEN quantity_value / 0.4 ELSE quantity_value END
+      ), 0) AS total
+      FROM listings WHERE status = 'delivered'
+    `).get().total
+  );
   const funding = db
     .prepare(
       "SELECT COALESCE(SUM(p.donor_contribution), 0) AS donor_contribution, COALESCE(SUM(p.csr_coverage), 0) AS csr_coverage, COALESCE(SUM(p.receiver_charge), 0) AS receiver_charge FROM payments p JOIN listings l ON l.id = p.listing_id WHERE l.status = 'delivered'"
     )
     .get();
 
-  const mealsSaved = r2(delivered.total);
+  const deliveredCount = db
+    .prepare("SELECT COUNT(*) AS n FROM listings WHERE status = 'delivered'")
+    .get().n;
   const kgDiverted = r1(mealsSaved * KG_PER_MEAL);
   const co2eAvoidedKg = r1(kgDiverted * CO2_KG_PER_MEAL);
   const totalFunding = r2(funding.donor_contribution + funding.csr_coverage);
@@ -23,7 +30,7 @@ function getImpact(db) {
   const formula_meta = {
     meals_saved: {
       formula: 'SUM(quantity_value) over listings with status = delivered',
-      inputs: { delivered_listing_count: delivered.n },
+      inputs: { delivered_listing_count: deliveredCount },
     },
     kg_diverted: {
       formula: 'meals_saved * 0.4',

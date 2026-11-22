@@ -24,7 +24,7 @@ const RECEIVERS = [
   ['R1', 'Asha Community Kitchen', 'community_kitchen', 'Koramangala', 12.934, 77.622, 80, 0.9],
   ['R2', 'Hope NGO', 'ngo', 'Indiranagar', 12.976, 77.639, 50, 0.7],
   ['R3', 'Shelter First', 'shelter', 'HSR Layout', 12.91, 77.637, 40, 0.85],
-  ['R4', 'Priya (Volunteer)', 'volunteer', 'Whitefield', 12.97, 77.751, 10, 0.5],
+  ['R4', 'Priya (Volunteer)', 'volunteer', 'Whitefield', 12.97, 77.75, 10, 0.5],
   ['R5', 'New Life Kitchen', 'community_kitchen', 'Banashankari', 12.918, 77.549, 60, 0.75],
   ['R6', 'Care Shelter', 'shelter', 'Jayanagar', 12.929, 77.582, 35, 0.8],
   ['R7', 'FoodBridge NGO', 'ngo', 'Koramangala', 12.936, 77.626, 70, 0.65],
