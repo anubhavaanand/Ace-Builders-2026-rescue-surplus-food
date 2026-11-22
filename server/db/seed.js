@@ -43,8 +43,8 @@ const VOLUNTEERS = [
 // expires_at and pickup_by (both NOT NULL in schema).
 const LISTINGS = [
   { id: 'L1', donor: 'D1', food: 'veg', qty: 60, unit: 'meals', storage: 'hot', allergens: [], status: 'posted', posted: -10, expires: 110 },
-  { id: 'L2', donor: 'D2', food: 'veg', qty: 25, unit: 'meals', storage: 'ambient', allergens: ['dairy'], status: 'claimed', posted: -45, claimed: -30, expires: 75 },
-  { id: 'L3', donor: 'D3', food: 'egg', qty: 15, unit: 'kg', storage: 'cold', allergens: ['egg'], status: 'collected', posted: -90, claimed: -70, collected: -20, expires: 30 },
+  { id: 'L2', donor: 'D2', food: 'veg', qty: 25, unit: 'meals', storage: 'ambient', allergens: ['dairy'], status: 'claimed', posted: -45, claimed: -30, expires: 75, receiver: 'R1', volunteer: 'V1' },
+  { id: 'L3', donor: 'D3', food: 'egg', qty: 15, unit: 'kg', storage: 'cold', allergens: ['egg'], status: 'collected', posted: -90, claimed: -70, collected: -20, expires: 30, receiver: 'R5', volunteer: 'V2' },
   { id: 'L4', donor: 'D4', food: 'non_veg', qty: 40, unit: 'meals', storage: 'hot', allergens: ['nuts'], status: 'delivered', posted: -180, claimed: -150, collected: -90, delivered: -60, expires: 0, receiver: 'R4', volunteer: 'V2' },
   { id: 'L5', donor: 'D5', food: 'veg', qty: 30, unit: 'meals', storage: 'ambient', allergens: [], status: 'posted', posted: -5, expires: 115 },
   { id: 'L6', donor: 'D6', food: 'veg', qty: 10, unit: 'kg', storage: 'cold', allergens: ['gluten'], status: 'expired', posted: -240, expires: -60 },
@@ -63,7 +63,7 @@ const randInt = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
 const round1 = (x) => Math.round(x * 10) / 10;
 
 // Idempotent: does nothing unless the donors table is empty.
-function seed(db) {
+function seedIfEmpty(db) {
   const { n } = db.prepare('SELECT COUNT(*) AS n FROM donors').get();
   if (n > 0) return false;
 
@@ -184,13 +184,13 @@ function seed(db) {
         at(dayBase)
       );
 
-      insImpact.run(crypto.randomUUID(), listingId, 'meals_saved', meals, 'random meals 10-80 for the day', JSON.stringify({ meals }));
+      insImpact.run(crypto.randomUUID(), listingId, 'meals_saved', meals, 'quantity_value (meals)', JSON.stringify({ meals }));
       insImpact.run(
         crypto.randomUUID(),
         listingId,
         'kg_diverted',
         kg,
-        'round(meals * 0.4, 1)',
+        'meals × 0.4 kg per meal',
         JSON.stringify({ meals, kg_per_meal: KG_PER_MEAL })
       );
       insImpact.run(
@@ -198,7 +198,7 @@ function seed(db) {
         listingId,
         'co2e_avoided',
         co2e,
-        'round(kg * 2.5, 1)',
+        'kg_diverted × 2.5 kg CO₂e per kg food',
         JSON.stringify({ kg, co2e_per_kg: CO2E_PER_KG })
       );
       insImpact.run(
@@ -218,4 +218,4 @@ function seed(db) {
   return true;
 }
 
-module.exports = { seed };
+module.exports = { seedIfEmpty };

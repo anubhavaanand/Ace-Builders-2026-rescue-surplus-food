@@ -204,7 +204,7 @@ router.post('/:id/transition', (req, res) => {
         [
           'meals_saved',
           meals,
-          'quantity meals',
+          'quantity_value (meals)',
           { quantity_value: listing.quantity_value, quantity_unit: listing.quantity_unit, meals },
         ],
         ['kg_diverted', kg, 'meals × 0.4 kg per meal', { meals, kg_per_meal: KG_PER_MEAL }],

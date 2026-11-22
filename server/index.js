@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const { getDb } = require('./db/connection');
-const { seed } = require('./db/seed');
+const { seedIfEmpty } = require('./db/seed');
 const listingsRouter = require('./routes/listings');
 const impactRouter = require('./routes/impact');
 
@@ -10,7 +10,7 @@ app.use(express.json());
 
 const db = getDb();
 if (db.prepare('SELECT COUNT(*) AS n FROM donors').get().n === 0) {
-  seed(db);
+  seedIfEmpty(db);
 }
 
 app.use('/api/listings', listingsRouter);
