@@ -3,6 +3,7 @@ server/db/*.db
 client/dist/
 .env
 *.log
+.vscode/
 PRD-FULL.md
 02-TECH-ARCHITECTURE.md
 03-DATA-MODEL.md
