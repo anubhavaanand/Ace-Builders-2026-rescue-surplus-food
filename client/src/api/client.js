@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api';
+const BASE = import.meta.env.VITE_API_BASE || '/api';
 
 async function request(method, path, body) {
   const hasBody = body !== undefined;
