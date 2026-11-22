@@ -38,7 +38,7 @@ function validateListing(req, res, next) {
   }
   const donor = getDb().prepare('SELECT id, area FROM donors WHERE id = ?').get(b.donor_id);
   if (!donor) {
-    return fail(res, 'donor_id', 'donor_id does not exist');
+    return res.status(404).json({ error: 'donor not found', field: 'donor_id' });
   }
   if (!Number.isFinite(b.lat)) {
     return fail(res, 'lat', 'lat must be a finite number');
@@ -46,6 +46,10 @@ function validateListing(req, res, next) {
   if (!Number.isFinite(b.lng)) {
     return fail(res, 'lng', 'lng must be a finite number');
   }
+  if (b.allergens !== undefined && !Array.isArray(b.allergens)) {
+    return fail(res, 'allergens', 'allergens must be an array');
+  }
+
 
   req.donor = donor;
   next();

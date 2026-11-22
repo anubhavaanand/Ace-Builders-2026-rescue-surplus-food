@@ -10,7 +10,7 @@ function getImpact(db) {
     .get();
   const funding = db
     .prepare(
-      'SELECT COALESCE(SUM(donor_contribution), 0) AS donor_contribution, COALESCE(SUM(csr_coverage), 0) AS csr_coverage FROM payments'
+      "SELECT COALESCE(SUM(p.donor_contribution), 0) AS donor_contribution, COALESCE(SUM(p.csr_coverage), 0) AS csr_coverage FROM payments p JOIN listings l ON l.id = p.listing_id WHERE l.status = 'delivered'"
     )
     .get();
 
@@ -23,7 +23,7 @@ function getImpact(db) {
   const formula_meta = {
     meals_saved: {
       formula: 'SUM(quantity_value) over listings with status = delivered',
-      inputs: { delivered_listings: delivered.n },
+      inputs: { delivered_listing_count: delivered.n },
     },
     kg_diverted: {
       formula: 'meals_saved * 0.4',
@@ -31,10 +31,10 @@ function getImpact(db) {
     },
     co2e_avoided_kg: {
       formula: 'kg_diverted * 2.5',
-      inputs: { kg_diverted: kgDiverted, co2e_kg_per_kg_diverted: CO2_KG_PER_MEAL },
+      inputs: { kg_diverted: kgDiverted, co2e_factor: CO2_KG_PER_MEAL },
     },
     cost_per_meal_saved: {
-      formula: 'SUM(donor_contribution + csr_coverage) / meals_saved',
+      formula: 'SUM(donor_contribution + csr_coverage) over delivered listings / SUM(quantity_value) over delivered listings',
       inputs: { total_funding: totalFunding, meals_saved: mealsSaved },
     },
   };

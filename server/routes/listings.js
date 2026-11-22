@@ -222,7 +222,15 @@ router.post('/:id/transition', (req, res) => {
   });
 
   if (!apply()) return notAllowed();
-  res.status(200).json({ status: to });
+  const stamps = db.prepare('SELECT collected_at, delivered_at FROM listings WHERE id = ?').get(req.params.id);
+  const stampKey = to === 'delivered' ? 'delivered_at' : 'collected_at';
+  const actor_id = req.body && req.body.actor_id !== undefined ? req.body.actor_id : null;
+  res.status(200).json({
+    listing_id: req.params.id,
+    status: to,
+    [stampKey]: stamps[stampKey],
+    actor_id,
+  });
 });
 
 
@@ -231,7 +239,7 @@ router.get('/:id', (req, res) => {
   const db = getDb();
   const listing = db
     .prepare(
-      'SELECT l.*, d.name AS donor_name, d.type AS donor_type FROM listings l JOIN donors d ON d.id = l.donor_id WHERE l.id = ?'
+      'SELECT l.*, d.name AS donor_name, d.type AS donor_type, v.name AS claimed_by_volunteer_name FROM listings l JOIN donors d ON d.id = l.donor_id LEFT JOIN volunteers v ON v.id = l.claimed_by_volunteer_id WHERE l.id = ?'
     )
     .get(req.params.id);
   if (!listing) return notFound(res, 'listing not found');
