@@ -164,16 +164,30 @@ Target directory: Create all files directly inside `./client` (do NOT touch `./s
 
 ---
 
+### Entry 008 — Post-Exhaustion Infrastructure Hardening, CI/CD Pipeline & Cloud Deployment
+- **Timestamp:** 2026-11-22 22:45 IST  
+- **Context:** Following platform token limit exhaustion in Codebenders IDE (`BalanceExhausted`), transitioned to production hardening, CI/CD pipeline automation, and container ingress networking.
+- **Actions Executed:**
+  - **CI/CD Pipeline (`.github/workflows/ci.yml`):** Implemented automated GitHub Actions workflow on Node.js 22 to test production builds and verify server syntax/route integrity on every push and PR.
+  - **Cloud Container Build Script Hardening (`package.json`):** Updated root build script (`"build": "cd client && npm install && npm run build && cd ../server && npm install"`) ensuring server dependencies (`express`, `better-sqlite3`) are properly installed in cloud build containers alongside the client PWA.
+  - **Container Host Binding (`server/index.js`):** Explicitly bound Express server to `0.0.0.0` (replacing implicit `localhost` binding) to allow Railway/Render edge proxies to route ingress HTTP traffic into the container.
+  - **Database Path Normalization (`server/db/connection.js`):** Added robust path resolution logic to handle both root and nested `/server` execution contexts cleanly.
+  - **Repository Hygiene & Untracking:** Untracked local `.vscode/settings.json`, added `.vscode/` to `.gitignore`, and pushed clean repository state to GitHub.
+- **Result:** Automated CI/CD test suite verified green, working tree clean, and live deployment container operational.
+
+---
+
 ## Summary (Final Deliverable)
 
 | Metric | Final Value | Target |
 |---|---|---|
-| Total Nexen prompt cycles logged | 7 | 6–8 |
+| Total Nexen prompt cycles logged | 8 | 6–8 |
 | Backend files generated & verified | 11/11 | 11 |
 | Frontend files generated & built | 26/26 | 25+ |
 | PWA assets & Service Worker | Verified (`client/dist/sw.js`) | Verified |
 | API endpoints verified | 6/6 | 6 |
 | Database seeded | Yes (`rescue.db`) | Yes |
+| CI/CD Pipeline | Automated GitHub Actions (`ci.yml`) | Active |
 | Build status | `client` builds cleanly (exit 0) | Clean build |
 
 ---
@@ -189,3 +203,6 @@ Target directory: Create all files directly inside `./client` (do NOT touch `./s
 | Pure-Node PWA icon generator (`make-icons.mjs`) | Avoided heavy external image library dependencies in Vite container | Entry 005 |
 | Scoped `cost_per_meal_saved` to delivered listings | Accurate CSR unit economics reflecting real delivered volume | Entry 006 |
 | Volunteer instruction role gating | Privacy protection: donor address details only revealed to assigned volunteers | Entry 006, 007 |
+| Explicit `0.0.0.0` host binding | Ensures cloud container edge proxies route incoming HTTP traffic | Entry 008 |
+| Unified root build install script | Eliminates container runtime failures from missing server modules | Entry 008 |
+| Automated GitHub Actions CI pipeline | Continuous integration validating syntax and build integrity | Entry 008 |
