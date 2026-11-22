@@ -2,7 +2,16 @@ const fs = require('fs');
 const path = require('path');
 const Database = require('better-sqlite3');
 
-const DB_PATH = process.env.DB_PATH || path.resolve(__dirname, '..', 'db', 'rescue.db');
+let dbPath = process.env.DB_PATH;
+if (dbPath) {
+  if (dbPath.startsWith('./server/') && process.cwd().endsWith('/server')) {
+    dbPath = '.' + dbPath.slice(8);
+  }
+  dbPath = path.resolve(process.cwd(), dbPath);
+} else {
+  dbPath = path.resolve(__dirname, 'rescue.db');
+}
+const DB_PATH = dbPath;
 
 let db = null;
 
