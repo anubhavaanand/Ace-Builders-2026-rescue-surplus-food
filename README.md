@@ -8,8 +8,7 @@ A mobile-first Progressive Web App that connects surplus food from donors (cater
 
 ## Live Demo
 
-🌐 **[https://rescue-surplus-food.up.railway.app](https://rescue-surplus-food.up.railway.app)**  
-*(Replace with actual deployed URL after Railway deployment)*
+🌐 **[https://ace-builders-2026-rescue-surplus-food.up.railway.app](https://ace-builders-2026-rescue-surplus-food.up.railway.app)**
 
 **Demo credentials:** No login required. Use the **Role Switch** dropdown at the top to toggle between:
 - **Donor** — post surplus food
